@@ -1,0 +1,11 @@
+﻿#startTask
+TaskID=0001
+TaskName=SOLIDWORKS_Config_output_dir
+Data="G:\SOLIDWORKS\CAD_Data\ConfigOptions\StructOption.SLDASM"
+ConfigFile=G:\SOLIDWORKS\Config_Files\Config_Options\output_dir.config
+GoldFile=
+CmdOption=-v -z G:\SOLIDWORKS\Config_Files\Config_Options\output_dir.config
+EnvVariables=
+JTCompare=No
+Note=
+#endTask
