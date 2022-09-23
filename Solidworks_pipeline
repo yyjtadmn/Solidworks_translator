@@ -1,0 +1,71 @@
+def gv
+def groupDir
+def BUILD_AGENT='pni6w2981_yyjtadmn_WINDOW'
+
+pipeline {
+    agent any
+	parameters {
+		string(name: 'SolidworksRelease', defaultValue: 'SWV22.0', description : 'Provide the Solidworks Translator Version to create the build.')
+		string(name: 'GroupPath', defaultValue: 'J://Group_build/SW', description : 'Path where build unit for the run is to be created.')
+	}
+    stages {
+		stage('check') {
+            agent { label "${BUILD_AGENT}" }
+            steps {
+                script{
+                    echo  "checking if any new CP has been submitted or not."
+                    def stdout = bat(returnStdout: true , script: 'P:/Data_Exchange/from_Roma/jenkins/check_CPList.bat Group_SW2022.0').trim()
+                    result = stdout.readLines().drop(1).join(" ")
+                    if (result.equals("0")) {                                          
+                      error "As there is no CP submitted so skipping Group build and testing!"
+                    } 
+                    else {                                   
+                        echo "total number of CP submitted for this build is ${result}"
+                    } 
+			    }
+            }
+        }
+        stage('Build') {
+            agent { label "${BUILD_AGENT}" }
+            steps {
+                script{
+                groupDir ="${params.GroupPath}/${params.SolidworksRelease}"
+                echo  "Build started for the group at ${groupDir}"
+                bat """ P:/Data_Exchange/from_Roma/jenkins/sw_groupBuild20.bat ${groupDir} """
+			    }
+            }
+        }
+        stage('Copy') {
+            agent { label "${BUILD_AGENT}" }
+            steps {
+            script{
+                echo  "Copy binaries from the group ${groupDir} to locally installed directory"
+                bat """ P:/Data_Exchange/from_Roma/jenkins/copy_solidworks2020kit.bat """ 
+			    }
+            }
+        }
+		stage('Test') {
+            agent { label "${BUILD_AGENT}" }
+            steps {
+            script{
+                echo  "Test started for the group at ${groupDir}"
+                bat """ P:/Data_Exchange/from_Roma/jenkins/SolidWorks_group_regrun_dummy.bat ${groupDir} """ 
+			    }
+            }
+        }
+    }
+
+    post {
+		
+        success {
+            echo 'All tasks completed successfully.'
+        }
+		failure {
+			echo 'One or more stages have failed.'
+		}
+		always {
+			echo 'Running Solidworks Group activities completed.'					
+		}
+		
+    }
+}
