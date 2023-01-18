@@ -18,7 +18,7 @@ pipeline {
                 script{
                     echo  "checking if any new CP has been submitted or not."
 		    groupNames="${params.GroupName}"
-                    def stdout = bat(returnStdout: true , script: ' ./Scripts/check_CPList.bat ${groupNames} ').trim()
+                    def stdout = bat(returnStdout: true , script: ' ./Scripts/check_CPList.bat "${groupNames}" ').trim()
                     result = stdout.readLines().drop(1).join(" ")
                     if (result.equals("0")) {                                          
                       echo "Skipping Stagging and deploy as no new CP submitted to group"
