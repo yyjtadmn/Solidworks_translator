@@ -1,6 +1,6 @@
 def gv
 def groupDir
-def groupName
+def groupName1
 def BUILD_PROCESS_FLAG
 def BUILD_AGENT='pni6w2981_yyjtadmn_windows'
 
@@ -12,13 +12,13 @@ pipeline {
 		string(name: 'GroupName', defaultValue: 'Group_SW2023.0', description : 'Name of the group in DMS.')
 	}
     stages {
-		stage('check') {
+	  stage('check') {
             agent { label "${BUILD_AGENT}" }
             steps {
                 script{
                     echo  "checking if any new CP has been submitted or not."
-		    groupName="${params.GroupName}"
-                    def stdout = bat(returnStdout: true , script: ''' ./Scripts/check_CPList.bat ${groupName} ''').trim()
+		    groupName1=${params.GroupName}
+                    def stdout = bat(returnStdout: true , script: ' ./Scripts/check_CPList.bat ${groupName1} ').trim()
                     result = stdout.readLines().drop(1).join(" ")
                     if (result.equals("0")) {                                          
                       echo "Skipping Stagging and deploy as no new CP submitted to group"
