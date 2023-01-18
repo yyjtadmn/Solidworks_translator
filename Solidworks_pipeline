@@ -1,5 +1,6 @@
 def gv
 def groupDir
+def groupName
 def BUILD_PROCESS_FLAG
 def BUILD_AGENT='pni6w2981_yyjtadmn_windows'
 
@@ -16,7 +17,8 @@ pipeline {
             steps {
                 script{
                     echo  "checking if any new CP has been submitted or not."
-                    def stdout = bat(returnStdout: true , script: './Scripts/check_CPList.bat ${params.GroupName}').trim()
+		    groupName="${params.GroupName}"
+                    def stdout = bat(returnStdout: true , script: './Scripts/check_CPList.bat ${groupName}').trim()
                     result = stdout.readLines().drop(1).join(" ")
                     if (result.equals("0")) {                                          
                       echo "Skipping Stagging and deploy as no new CP submitted to group"
