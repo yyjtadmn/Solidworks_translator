@@ -1,5 +1,6 @@
 def gv
 def groupDir
+def BUILD_PROCESS_FLAG
 def BUILD_AGENT='pni6w2981_yyjtadmn_windows'
 
 pipeline {
@@ -7,6 +8,7 @@ pipeline {
 	parameters {
 		string(name: 'SolidworksRelease', defaultValue: 'SWV23.0', description : 'Provide the Solidworks Translator Version to create the build.')
 		string(name: 'GroupPath', defaultValue: 'J://Group_build/SW', description : 'Path where build unit for the run is to be created.')
+		string(name: 'GroupName', defaultValue: 'Group_SW2023.0', description : 'Name of the group in DMS.')
 	}
     stages {
 		stage('check') {
@@ -14,19 +16,24 @@ pipeline {
             steps {
                 script{
                     echo  "checking if any new CP has been submitted or not."
-                    def stdout = bat(returnStdout: true , script: './Scripts/check_CPList.bat Group_SW2023.0').trim()
+                    def stdout = bat(returnStdout: true , script: './Scripts/check_CPList.bat ${params.GroupName}').trim()
                     result = stdout.readLines().drop(1).join(" ")
                     if (result.equals("0")) {                                          
-                      error "As there is no CP submitted so skipping Group build and testing!"
+                      echo "Skipping Stagging and deploy as no new CP submitted to group"
+		      BUILD_PROCESS_FLAG=false	
                     } 
                     else {                                   
                         echo "total number of CP submitted for this build is ${result}"
+			BUILD_PROCESS_FLAG=true
                     } 
 			    }
             }
         }
         stage('Build') {
             agent { label "${BUILD_AGENT}" }
+	    when {
+			expression { "${BUILD_PROCESS_FLAG}"=="true" }
+		}
             steps {
                 script{
                 groupDir ="${params.GroupPath}/${params.SolidworksRelease}"
@@ -37,6 +44,9 @@ pipeline {
         }
         stage('Copy') {
             agent { label "${BUILD_AGENT}" }
+	    when {
+			expression { "${BUILD_PROCESS_FLAG}"=="true" }
+		}
             steps {
             script{
                 echo  "Copy binaries from the group ${groupDir} to locally installed directory"
@@ -44,8 +54,11 @@ pipeline {
 			    }
             }
         }
-		stage('Test') {
+	stage('Test') {
             agent { label "${BUILD_AGENT}" }
+	    when {
+			expression { "${BUILD_PROCESS_FLAG}"=="true" }
+		}
             steps {
             script{
                 echo  "Test started for the group at ${groupDir}"
