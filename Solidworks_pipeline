@@ -40,7 +40,7 @@ pipeline {
             steps {
             script{
                 echo  "Copy binaries from the group ${groupDir} to locally installed directory"
-                bat """ P:/Data_Exchange/from_Roma/jenkins/copy_solidworks2020kit.bat """ 
+                bat """ J:/Group_build/Group_build_scripts/SolidWorks/pipeline/Scripts/copy_solidworks2020kit.bat """ 
 			    }
             }
         }
