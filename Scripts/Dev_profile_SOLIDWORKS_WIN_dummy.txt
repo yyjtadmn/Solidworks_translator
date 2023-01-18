@@ -3,8 +3,8 @@
 #CADName=Solidworks
 #CADVersion=
 #TranslatorUsage=swtojt.exe
-#TaskFilename=P:\Data_Exchange\from_Roma\jenkins\Dev_Taskfile_SOLIDWORKS_WIN_allCases.txt
-#TranslatorInstall=C:\Program Files\Siemens\JTTranslators\SolidworksJT_21.1
+#TaskFilename=./Scripts/Dev_Taskfile_SOLIDWORKS_WIN_allCases.txt
+#TranslatorInstall=C:\Program Files\Siemens\JTTranslators\SolidworksJT_23.0.0
 #JTCompareInstall=c:\temp
 #JTCompareFlag=No
 #ResultDirectory=Q:\64_bit\SolidWork_Group_Wed_Jul_13_13_48_49_2022
