@@ -18,6 +18,7 @@ pipeline {
                 script{
                     echo  "checking if any new CP has been submitted or not."
 		    groupNames="${params.GroupName}"
+		    echo "${groupNames}"
                     def stdout = bat(returnStdout: true , script: ' ./Scripts/check_CPList.bat "${groupNames}" ').trim()
                     result = stdout.readLines().drop(1).join(" ")
                     if (result.equals("0")) {                                          
