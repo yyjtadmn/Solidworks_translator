@@ -1,11 +1,11 @@
 def gv
 def groupDir
-def BUILD_AGENT='pni6w2981_yyjtadmn_WINDOW'
+def BUILD_AGENT='pni6w2981_yyjtadmn_windows'
 
 pipeline {
     agent any
 	parameters {
-		string(name: 'SolidworksRelease', defaultValue: 'SWV22.0', description : 'Provide the Solidworks Translator Version to create the build.')
+		string(name: 'SolidworksRelease', defaultValue: 'SWV23.0', description : 'Provide the Solidworks Translator Version to create the build.')
 		string(name: 'GroupPath', defaultValue: 'J://Group_build/SW', description : 'Path where build unit for the run is to be created.')
 	}
     stages {
