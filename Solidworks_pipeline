@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script{
                     echo  "checking if any new CP has been submitted or not."
-                    def stdout = bat(returnStdout: true , script: 'P:/Data_Exchange/from_Roma/jenkins/check_CPList.bat Group_SW2022.0').trim()
+                    def stdout = bat(returnStdout: true , script: './Scripts/check_CPList.bat Group_SW2023.0').trim()
                     result = stdout.readLines().drop(1).join(" ")
                     if (result.equals("0")) {                                          
                       error "As there is no CP submitted so skipping Group build and testing!"
